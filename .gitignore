@@ -4,6 +4,9 @@
 
 *.cbp
 *.layout
+*.depend
+bin/
+obj/
 
 #################
 ## Eclipse
