@@ -25,9 +25,9 @@ class BP
             bool taken = result != branch+4;
             bool predt = mcounter[ind] >= 1<<(len-1);
             if(taken){
-                mcounter[ind] = min(mcounter[ind]+1, (1<<len)-1);
+                mcounter[ind] = std::min(mcounter[ind]+1, (1<<len)-1);
             }else{
-                mcounter[ind] = max(mcounter[ind]-1, 0);
+                mcounter[ind] = std::max(mcounter[ind]-1, 0);
             }
             bool win = ((result == mtarget[ind]) && predt) || (!taken && !predt);
             if(taken){

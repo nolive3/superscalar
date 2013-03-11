@@ -13,8 +13,15 @@ using namespace std;
 void test(void);
 void test(void)
 {
-    cout << Cache<32, 6, 4>();
-    cout << BP<3, 5, 7>();
+    BP<2, 8, 16> bp;
+    int addr = 0;
+    proc_inst_t p_inst;
+    cout << boolalpha;
+    while(read_instruction(&p_inst)){
+        cout << bp.predict(addr, p_inst.instruction_address) << endl;
+        addr = p_inst.instruction_address;
+    }
+    cout << bp;
 }
 
 
