@@ -13,6 +13,7 @@
  * @m Schedule queue multiplier
  */
 void setup_proc(uint64_t k0, uint64_t k1, uint64_t k2, uint64_t f, uint64_t m) {
+
 }
 
 /**
@@ -23,6 +24,7 @@ void setup_proc(uint64_t k0, uint64_t k1, uint64_t k2, uint64_t f, uint64_t m) {
  * @p_stats Pointer to the statistics structure
  */
 void run_proc(proc_stats_t* p_stats) {
+
 }
 
 /**
@@ -33,4 +35,5 @@ void run_proc(proc_stats_t* p_stats) {
  * @p_stats Pointer to the statistics structure
  */
 void complete_proc(proc_stats_t *p_stats) {
+
 }

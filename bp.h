@@ -1,25 +1,44 @@
 #ifndef BP_H
 #define BP_H
 #include <cstdint>
-template <int bits, int div, int mod>
+template <int len, int div, int mod>
 class BP
 {
+    friend std::ostream& operator<<(std::ostream& out, const BP& t){
+        out << len << " (N/" << div << ")%" << mod << ", Contents:" << std::endl;
+        for (int i = 0; i < mod; ++i){
+            out << i << ": (0x" << std::hex << std::setw(((32)>>2)) << std::setfill('0') << t.mtarget[i] << ", ";
+            out << t. mcounter[i] << ")" << std::endl;
+        }
+        return out;
+    }
     public:
-        bool predict(uint32_t branch, uint32_t result){
-            if(mvalid[index(addr)] && mtag[index(addr)] == tag(addr)){
-                return true;
+        BP(){
+            for(int i = 0; i < mod; ++i){
+                mtarget[i] = 0;
+                mcounter[i] = (1<<(len-1))-1;
             }
-            mvalid[index(addr)] = true;
-            mtag[index(addr)] = tag(addr);
-            return false;
         }
 
+        bool predict(uint32_t branch, uint32_t result){
+            int ind = (branch/div)%mod;
+            bool taken = result != branch+4;
+            bool predt = mcounter[ind] >= 1<<(len-1);
+            if(taken){
+                mcounter[ind] = min(mcounter[ind]+1, (1<<len)-1);
+            }else{
+                mcounter[ind] = max(mcounter[ind]-1, 0);
+            }
+            bool win = ((result == mtarget[ind]) && predt) || (!taken && !predt);
+            if(taken){
+                mtarget[ind] = result;
+            }
+            return win;
+        }
     protected:
     private:
-        uint32_t index(uint32_t addr){return (addr>>B)&((1<<(C-B))-1);}
-        uint32_t tag(uint32_t addr){return (addr>>C)&((1<<(addr_len-C))-1);}
         uint32_t mtarget[mod];
-        bool mvalid[1<<(C-B)];
+        int mcounter[mod];
 
 };
 

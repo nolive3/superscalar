@@ -3,10 +3,19 @@
 #include <cstdlib>
 #include <cstring>
 #include <unistd.h>
+#include <iostream>
 #include "procsim.hpp"
+#include "cache.h"
+#include "bp.h"
 
-#define __STDC_FORMAT_MACROS
-#include <inttypes.h>
+using namespace std;
+
+void test(void);
+void test(void)
+{
+    cout << Cache<32, 6, 4>();
+    cout << BP<3, 5, 7>();
+}
 
 
 void print_help_and_exit(void);
@@ -17,6 +26,7 @@ void print_help_and_exit(void) {
     printf("  -l k2\t\tNumber of k2 FUs\n");
     printf("  -m M\t\tNumber of blocks per set is 2^S\n");
     printf("  -f N\t\tNumber of instructions to fetch\n");
+    printf("  -t\trun test function\n");
     printf("  -h\t\tThis helpful output\n");
     exit(0);
 }
@@ -56,7 +66,7 @@ int main(int argc, char* argv[]) {
     uint64_t k2 = DEFAULT_K2;
 
     /* Read arguments */
-    while(-1 != (opt = getopt(argc, argv, "j:k:l:f:m:h"))) {
+    while(-1 != (opt = getopt(argc, argv, "j:k:l:f:m:h:t"))) {
         switch(opt) {
         case 'j':
             k0 = atoi(optarg);
@@ -73,6 +83,9 @@ int main(int argc, char* argv[]) {
         case 'f':
             f = atoi(optarg);
             break;
+        case 't':
+            test();
+            exit(0);
         case 'h':
             /* Fall through */
         default:
