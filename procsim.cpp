@@ -1,6 +1,12 @@
 #include "procsim.hpp"
 #include "cache.h"
 #include <iostream>
+
+uint64_t ifetched = 0;
+uint64_t icompleated =
+bool firstround = true;
+
+
 /**
  * Subroutine for initializing the processor. You many add and initialize any global or heap
  * variables as needed.
@@ -13,7 +19,6 @@
  * @m Schedule queue multiplier
  */
 void setup_proc(uint64_t k0, uint64_t k1, uint64_t k2, uint64_t f, uint64_t m) {
-
 }
 
 /**
@@ -24,7 +29,11 @@ void setup_proc(uint64_t k0, uint64_t k1, uint64_t k2, uint64_t f, uint64_t m) {
  * @p_stats Pointer to the statistics structure
  */
 void run_proc(proc_stats_t* p_stats) {
-
+    state_update(p_stats);
+    execute(p_stats);
+    schedule(p_stats);
+    dispatch(p_stats);
+    fetch(p_stats);
 }
 
 /**

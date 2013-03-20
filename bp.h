@@ -24,16 +24,21 @@ class BP
             int ind = (branch/div)%mod;
             bool taken = result != branch+4;
             bool predt = mcounter[ind] >= 1<<(len-1);
+            bool win = ((result == mtarget[ind]) && predt) || (!taken && !predt);
+            return win;
+        }
+
+        void update(uint32_t branch, uint32_t result){
+            bool taken = result != branch+4;
+            int ind = (branch/div)%mod;
             if(taken){
                 mcounter[ind] = std::min(mcounter[ind]+1, (1<<len)-1);
             }else{
                 mcounter[ind] = std::max(mcounter[ind]-1, 0);
             }
-            bool win = ((result == mtarget[ind]) && predt) || (!taken && !predt);
             if(taken){
                 mtarget[ind] = result;
             }
-            return win;
         }
     protected:
     private:
