@@ -32,7 +32,7 @@ class Cache
     private:
         uint32_t index(uint32_t addr){return (addr>>B)&((1<<(C-B))-1);}
         uint32_t tag(uint32_t addr){return (addr>>C)&((1<<(addr_len-C))-1);}
-        int mtag[1<<(C-B)];
+        uint32_t mtag[1<<(C-B)];
         bool mvalid[1<<(C-B)];
 };
 

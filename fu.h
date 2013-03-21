@@ -31,6 +31,7 @@ class FU{
             if(in_use())
                 return false;
             buffer[stages-1] = inst;
+            return true;
         }
 };
 #endif
