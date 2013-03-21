@@ -2,6 +2,8 @@
 #include "fetched.h"
 #include "regfile.h"
 #include "schedule.h"
+#include "result_bus.h"
+#include <iostream>
 
 
 void dispatch(proc_stats_t* stats){
@@ -15,12 +17,14 @@ void dispatch(proc_stats_t* stats){
             realinst.dispatched = cycle;
         i.instruction_number = inst;
         i.valid = true;
+	i.reg_ready[0] = true;
+	i.reg_ready[1] = true;
         if(realinst.src_reg[0] != -1){
-            i.reg_ready[0] = !reg_busy(realinst.src_reg[0]);
+            i.reg_ready[0] = !reg_busy(realinst.src_reg[0]) || is_compleating(reg_tag(realinst.src_reg[0]));
             i.reg_deps[0] = reg_tag(realinst.src_reg[0]);
         }
         if(realinst.src_reg[1] != -1){
-            i.reg_ready[1] = !reg_busy(realinst.src_reg[1]);
+            i.reg_ready[1] = !reg_busy(realinst.src_reg[1]) || is_compleating(reg_tag(realinst.src_reg[1]));
             i.reg_deps[1] = reg_tag(realinst.src_reg[1]);
         }
         success = false;

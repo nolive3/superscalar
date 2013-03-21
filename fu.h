@@ -4,6 +4,7 @@
 #define FU_H
 #include <cstdint>
 #include "procsim.hpp"
+#include <iostream>
 struct inst_entry{
     uint64_t tag = 0;
     bool filled = false;

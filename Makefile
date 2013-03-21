@@ -3,19 +3,19 @@ CXX=g++
 
 all: procsim
 
-bp.o: bp.cpp bp.h
-dispatch.o: dispatch.cpp dispatch.h fetch.h regfile.h schedule.h
-execute.o: execute.cpp execute.h
-fetch.o: fetch.cpp fetch.h cache.h bp.h procsim.hpp fetched.h
-fetched.o: fetched.cpp fetched.h
+bp.o: bp.cpp bp.h fu.h
+dispatch.o: dispatch.cpp dispatch.h fetch.h regfile.h schedule.h fu.h
+execute.o: execute.cpp execute.h fu.h
+fetch.o: fetch.cpp fetch.h cache.h bp.h procsim.hpp fetched.h fu.h
+fetched.o: fetched.cpp fetched.h fu.h
 procsim.o: procsim.cpp procsim.hpp cache.h fetch.h fetched.h dispatch.h\
- schedule.h execute.h stateupdate.h
-procsim_driver.o: procsim_driver.cpp procsim.hpp cache.h bp.h
-regfile.o: regfile.cpp regfile.h
-result_bus.o: result_bus.cpp result_bus.h
-schedule.o: schedule.cpp schedule.h result_bus.h execute.h
+ schedule.h execute.h stateupdate.h fu.h
+procsim_driver.o: procsim_driver.cpp procsim.hpp cache.h bp.h fu.h
+regfile.o: regfile.cpp regfile.h fu.h
+result_bus.o: result_bus.cpp result_bus.h fu.h
+schedule.o: schedule.cpp schedule.h result_bus.h execute.h fu.h
 stateupdate.o: stateupdate.cpp stateupdate.h execute.h result_bus.h\
- fu.h procsim.hpp bp.h schedule.h dispatch.h
+ fu.h procsim.hpp bp.h schedule.h dispatch.h fu.h
 
 
 

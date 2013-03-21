@@ -93,13 +93,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    printf("Processor Settings\n");
-    printf("k0: %" PRIu64"\n", k0);
-    printf("k1: %" PRIu64"\n", k1);
-    printf("k2: %" PRIu64"\n", k2);
-    printf("F: %" PRIu64"\n", f);
-    printf("M: %" PRIu64"\n", m);
-    printf("\n");
 
     /* Setup the cache */
     setup_proc(k0, k1, k2, f, m);

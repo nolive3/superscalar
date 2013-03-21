@@ -17,10 +17,10 @@ void reserve_reg(uint64_t regno, uint64_t tag){
     r.pending = true;
     r.tag = tag;
 }
-void write_reg(uint64_t regno, uint64_t tag){
-    reg& r = get_register(regno);
-    if(r.tag == tag)
-        r.pending = false;
+void write_reg(uint64_t tag){
+    for(reg& r : regfile)
+    	if(r.tag == tag)
+        	r.pending = false;
 }
 bool reg_busy(uint64_t regno){
     return get_register(regno).pending;

@@ -3,6 +3,7 @@
 #include "result_bus.h"
 #include "fu.h"
 #include "procsim.hpp"
+#include "regfile.h"
 #include "bp.h"
 #include "schedule.h"
 #include "dispatch.h"
@@ -54,7 +55,10 @@ void state_update(proc_stats_t* stats){
             stats->total_branch_stall+=delta;
         }
         clearRS(rs0,i.tag);
-        clearRS(rs1,i.tag);// I have no fucking clue where I got it
+        clearRS(rs1,i.tag);
         clearRS(rs2,i.tag);
+	write_reg(i.tag);
+	complete_instruction(i.tag);
+	icompleated++;
     }
 }

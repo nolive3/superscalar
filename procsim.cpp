@@ -18,6 +18,11 @@ std::vector<proc_inst_t> instruction_list;
 proc_inst_t& getInstruction(uint64_t ino, bool& success){
     while(instruction_list.size()<ino){
         proc_inst_t tmp;
+	tmp.fetched = 0;
+	tmp.dispatched = 0;
+	tmp.scheduled = 0;
+	tmp.executed = 0;
+	tmp.retired = 0;
         if(read_instruction(&tmp)){
             instruction_list.push_back(tmp);
         } else {
@@ -77,6 +82,17 @@ void run_proc(proc_stats_t* p_stats) {
  * @p_stats Pointer to the statistics structure
  */
 void complete_proc(proc_stats_t *p_stats) {
+	std::cout << "INST	FETCH	DISP	SCHED	EXEC	STATE" << std::endl;
+	for (uint64_t num = 0; num < instruction_list.size(); num++){
+		auto& i = instruction_list[num];
+		std::cout << num+1
+		<<"	"<< i.fetched
+		<<"	"<< i.dispatched
+		<<"	"<< i.scheduled
+		<<"	"<< i.executed
+		<<"	"<< i.retired
+		<< std::endl;
+	}
     cycle += p_stats->total_branch_stall;
     p_stats->avg_dqueue_size = p_stats->total_dqueue_size/(float)cycle;
     p_stats->avg_inst_fire = ifetched/(float)cycle;

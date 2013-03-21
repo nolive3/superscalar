@@ -8,6 +8,8 @@ std::vector<inst_record> rs2;
 
 void schedule(){
     for (inst_record& i : rs0){
+        if(!i.valid)
+		continue;
         if(!i.reg_ready[0]){
             i.reg_ready[0] = is_compleating(i.reg_deps[0]);
         }
@@ -27,6 +29,8 @@ void schedule(){
         }
     }
     for (inst_record& i : rs1){
+        if(!i.valid)
+		continue;
         if(!i.reg_ready[0]){
             i.reg_ready[0] = is_compleating(i.reg_deps[0]);
         }
@@ -45,7 +49,9 @@ void schedule(){
             }
         }
     }
-    for (inst_record& i : rs1){
+    for (inst_record& i : rs2){
+        if(!i.valid)
+		continue;
         if(!i.reg_ready[0]){
             i.reg_ready[0] = is_compleating(i.reg_deps[0]);
         }
@@ -56,7 +62,7 @@ void schedule(){
             inst_entry t;
             t.filled = true;
             t.tag = i.instruction_number;
-            for(auto & fu : fu1){
+            for(auto & fu : fu2){
                 if(fu.use(t)){
                     i.running = true;
                     break;
