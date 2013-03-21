@@ -17,7 +17,8 @@ class FU{
         }
         void clock(){
             bool dc;
-            getInstruction(buffer[stages-1].tag, dc).executed = cycle;
+            if(buffer[stages-1].filled)
+                getInstruction(buffer[stages-1].tag, dc).executed = cycle;
             for(int i = 1; i < stages; ++i){
                 buffer[i-1] = buffer[i];
             }
