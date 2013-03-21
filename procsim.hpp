@@ -33,6 +33,7 @@ typedef struct _proc_stats_t
     unsigned long cycle_count;
     float avg_ipc;
     unsigned long max_dqueue_size;
+    unsigned long total_dqueue_size;
     float avg_dqueue_size;
     uint64_t num_branch;
     uint64_t num_correct;
@@ -41,9 +42,10 @@ typedef struct _proc_stats_t
 } proc_stats_t;
 
 
-uint64_t ifetched = 0;
-uint64_t icompleated = 0;
-bool getInstruction(uint64_t ino, proc_inst_t& result);
+extern uint64_t ifetched;
+extern uint64_t icompleated;
+extern uint64_t cycle;
+proc_inst_t& getInstruction(uint64_t ino, bool& result);
 
 bool read_instruction(proc_inst_t* p_inst);
 

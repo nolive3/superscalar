@@ -1,2 +1,3 @@
 #include "fetched.h"
-vector<uint64_t> fetched;
+#include <vector>
+std::vector<uint64_t> fetched;

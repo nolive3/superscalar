@@ -1,6 +1,6 @@
 #include "cache.h"
 #include "bp.h"
-#include "procsim.h"
+#include "procsim.hpp"
 #include "fetch.h"
 #include "fetched.h"
 
@@ -15,7 +15,7 @@ uint64_t fetch_rate = 1;
 void fetch(proc_stats_t* stats){
     static uint64_t next = 1;
     static uint64_t progress = 0;
-    static vector<uint64_t> fetching;
+    static std::vector<uint64_t> fetching;
     if(stall_timer > 0){
         stall_timer--;
         stats->total_cache_stall++;
@@ -24,13 +24,17 @@ void fetch(proc_stats_t* stats){
     if(stall_timer <= 0){
         stall_timer = -1;
     }
-    for(uint64_t i = next+progress; i < next+fetch_rate; i++){
-        progress++;
-        fetching.push_back(i);
+    for(uint64_t i = next+progress; i < next+fetch_rate; i++){;
         bool exists;
         proc_inst_t& inst = getInstruction(i, exists);
         if(!exists)
             break; //fetched all of the instructions
+        if(!icache.access(inst.instruction_address)){
+            stall_timer = STALL;// oops, cache miss
+            break;
+        }
+        progress++;
+        fetching.push_back(i);
         proc_inst_t& inst2 = getInstruction(i, exists);
         if(inst.op_code==-1&&exists){
             stats->num_branch++;
@@ -38,14 +42,18 @@ void fetch(proc_stats_t* stats){
             if(inst.predicted){
                 stats->num_correct++;
             }
-        }
-        if(icache.access(inst.instruction_address)){
-
         } else {
-            stall_timer = STALL;// oops, cache miss
-            return;
+            inst.predicted = true; // for later
         }
     }
+    for(uint64_t inst:fetching){
+        bool dc;
+        getInstruction(inst, dc).fetched = cycle;
+        fetched.push_back(inst);
+    }
+    next+=progress;
+    ifetched+=progress;
+    fetching.clear();
     progress = 0;
 }
 

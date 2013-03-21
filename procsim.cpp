@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "fetch.h"
+#include "fetched.h"
 #include "dispatch.h"
 #include "schedule.h"
 #include "execute.h"
@@ -12,7 +13,7 @@
 uint64_t ifetched = 0;
 uint64_t icompleated = 0;
 uint64_t cycle = 0;
-vector<proc_inst_t> instruction_list;
+std::vector<proc_inst_t> instruction_list;
 
 proc_inst_t& getInstruction(uint64_t ino, bool& success){
     while(instruction_list.size()<ino){
@@ -21,7 +22,7 @@ proc_inst_t& getInstruction(uint64_t ino, bool& success){
             instruction_list.push_back(tmp);
         } else {
             success = false;
-            return tmp;
+            return instruction_list[0];
         }
     }
     success = true;
@@ -41,6 +42,12 @@ proc_inst_t& getInstruction(uint64_t ino, bool& success){
  */
 void setup_proc(uint64_t k0, uint64_t k1, uint64_t k2, uint64_t f, uint64_t m) {
     fetch_rate = f;
+    fu0.resize(k0);
+    rs0.resize(m*k0);
+    fu1.resize(k1);
+    rs1.resize(m*k1);
+    fu2.resize(k2);
+    rs2.resize(m*k2);
 }
 
 /**
@@ -53,10 +60,11 @@ void setup_proc(uint64_t k0, uint64_t k1, uint64_t k2, uint64_t f, uint64_t m) {
 void run_proc(proc_stats_t* p_stats) {
     while (ifetched>icompleated || was_cache_stalled()){
         state_update(p_stats);
-        execute(p_stats);
-        schedule(p_stats);
+        execute();
+        schedule();
         dispatch(p_stats);
         fetch(p_stats);
+        p_stats->total_dqueue_size += fetched.size();
         cycle++;
     }
 }
@@ -69,5 +77,10 @@ void run_proc(proc_stats_t* p_stats) {
  * @p_stats Pointer to the statistics structure
  */
 void complete_proc(proc_stats_t *p_stats) {
-
+    cycle += p_stats->total_branch_stall;
+    p_stats->avg_dqueue_size = p_stats->total_dqueue_size/(float)cycle;
+    p_stats->avg_inst_fire = ifetched/(float)cycle;
+    p_stats->avg_ipc = icompleated/(float)cycle;
+    p_stats->cycle_count = cycle;
+    p_stats->retired_instruction = icompleated;
 }

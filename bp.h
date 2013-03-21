@@ -1,6 +1,8 @@
 #ifndef BP_H
 #define BP_H
 #include <cstdint>
+#include <iostream>
+#include <iomanip>
 template <int len, int div, int mod>
 class BP
 {
