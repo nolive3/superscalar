@@ -127,7 +127,7 @@ void print_statistics(proc_stats_t* p_stats) {
 	printf("Avg IPC: %f\n", p_stats->avg_ipc);
     printf("Maximum Dispatch Queue: %lu\n", p_stats->max_dqueue_size);
     printf("Average Dispatch Queue: %f\n", p_stats->avg_dqueue_size);
-    printf("Percentage Correct Branch Predictions: %f\n", p_stats->perc_branch_pred);
+    printf("Percentage Correct Branch Predictions: %f\n", 100*(p_stats->num_correct/(float)p_stats->num_branch));
     printf("Cycles stalled on ICache: %lu\n", p_stats->total_cache_stall);
     printf("Cycles stalled on Branch Mispredict: %lu\n", p_stats->total_branch_stall);
 }

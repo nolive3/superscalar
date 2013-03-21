@@ -16,9 +16,14 @@ typedef struct _proc_inst_t
     int32_t op_code;
     int32_t src_reg[2];
     int32_t dest_reg;
-    
+    bool predicted;
+    uint64_t fetched;
+    uint64_t dispatched;
+    uint64_t scheduled;
+    uint64_t executed;
+    uint64_t retired;
     // You may introduce other fields as needed
-    
+
 } proc_inst_t;
 
 typedef struct _proc_stats_t
@@ -29,10 +34,16 @@ typedef struct _proc_stats_t
     float avg_ipc;
     unsigned long max_dqueue_size;
     float avg_dqueue_size;
-    float perc_branch_pred;
+    uint64_t num_branch;
+    uint64_t num_correct;
     unsigned long total_cache_stall;
     unsigned long total_branch_stall;
 } proc_stats_t;
+
+
+uint64_t ifetched = 0;
+uint64_t icompleated = 0;
+bool getInstruction(uint64_t ino, proc_inst_t& result);
 
 bool read_instruction(proc_inst_t* p_inst);
 

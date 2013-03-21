@@ -47,5 +47,8 @@ class BP
 
 };
 
+
+extern BP<2, 8, 512> predictor;
+
 #endif // CACHE_H
 
