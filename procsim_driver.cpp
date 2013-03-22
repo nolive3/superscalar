@@ -13,7 +13,25 @@ using namespace std;
 void test(void);
 void test(void)
 {
+    uint64_t num_branch = 0;
+    uint64_t num_correct = 0;
+	int N = 10;
+	proc_inst_t ins[N];
+	read_instruction(ins+1);
+	while(read_instruction(ins)){
+		if(ins[1].op_code == -1){
+			num_branch++;
+			if(predictor.predict(ins[1].instruction_address, ins[0].instruction_address))
+				num_correct++;
+		}
+		if(ins[N-1].op_code == -1)
+			predictor.update(ins[N-1].instruction_address, ins[N-2].instruction_address);
 
+		for(int i = N-2; i >=0; --i){
+			ins[i+1] = ins[i];
+		}
+	}
+	printf("Percentage Correct Branch Predictions: %f(%llu/%llu)\n", 100*(num_correct/(float)num_branch), num_correct, num_branch);
 }
 
 
@@ -120,7 +138,7 @@ void print_statistics(proc_stats_t* p_stats) {
 	printf("Avg IPC: %f\n", p_stats->avg_ipc);
     printf("Maximum Dispatch Queue: %lu\n", p_stats->max_dqueue_size);
     printf("Average Dispatch Queue: %f\n", p_stats->avg_dqueue_size);
-    printf("Percentage Correct Branch Predictions: %f\n", 100*(p_stats->num_correct/(float)p_stats->num_branch));
+    printf("Percentage Correct Branch Predictions: %f(%llu/%llu)\n", 100*(p_stats->num_correct/(float)p_stats->num_branch), p_stats->num_correct, p_stats->num_branch);
     printf("Cycles stalled on ICache: %lu\n", p_stats->total_cache_stall);
     printf("Cycles stalled on Branch Mispredict: %lu\n", p_stats->total_branch_stall);
 }

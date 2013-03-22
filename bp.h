@@ -23,6 +23,7 @@ class BP
         }
 
         bool predict(uint32_t branch, uint32_t result){
+		
             int ind = (branch/div)%mod;
             bool taken = result != branch+4;
             bool predt = mcounter[ind] >= 1<<(len-1);

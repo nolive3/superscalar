@@ -35,8 +35,8 @@ void fetch(proc_stats_t* stats){
         }
         progress++;
         fetching.push_back(i);
-        proc_inst_t& inst2 = getInstruction(i, exists);
-        if(inst.op_code==-1&&exists){
+        proc_inst_t& inst2 = getInstruction(i+1, exists);
+        if(exists&&inst.op_code==-1){
             stats->num_branch++;
             inst.predicted = predictor.predict(inst.instruction_address, inst2.instruction_address);
             if(inst.predicted){
@@ -48,7 +48,7 @@ void fetch(proc_stats_t* stats){
     }
     for(uint64_t inst:fetching){
         bool dc;
-        getInstruction(inst, dc).fetched = cycle;
+        getInstruction(inst, dc).fetched = cycle-1;
         fetched.push_back(inst);
     }
     next+=progress;
