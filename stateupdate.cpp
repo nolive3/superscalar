@@ -51,7 +51,7 @@ void state_update(proc_stats_t* stats){
             predictor.update(inst.instruction_address, next.instruction_address);
         }
         if(!inst.predicted){
-            int delta = inst.retired-inst.fetched-1;
+            int delta = inst.retired-inst.fetched;
             stats->total_branch_stall+=delta;
         }
         clearRS(rs0,i.tag);

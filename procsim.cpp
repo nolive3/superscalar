@@ -2,6 +2,9 @@
 #include "cache.h"
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
 
 #include "fetch.h"
 #include "fetched.h"
@@ -18,11 +21,7 @@ std::vector<proc_inst_t> instruction_list;
 proc_inst_t& getInstruction(uint64_t ino, bool& success){
     while(instruction_list.size()<ino){
         proc_inst_t tmp;
-	tmp.fetched = 0;
-	tmp.dispatched = 0;
-	tmp.scheduled = 0;
-	tmp.executed = 0;
-	tmp.retired = 0;
+    	memset(&tmp, 0, sizeof(proc_inst_t));
         if(read_instruction(&tmp)){
             instruction_list.push_back(tmp);
         } else {

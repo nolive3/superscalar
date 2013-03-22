@@ -34,16 +34,19 @@ void fetch(proc_stats_t* stats){
             break;
         }
         progress++;
+        inst.predicted = true; // for later
         fetching.push_back(i);
-        proc_inst_t& inst2 = getInstruction(i+1, exists);
-        if(exists&&inst.op_code==-1){
+        if(inst.op_code==-1){
+        proc_inst_t inst2 = getInstruction(i+1, exists);
+        proc_inst_t& inst3 = getInstruction(i, exists);
+	if(exists){
+
             stats->num_branch++;
-            inst.predicted = predictor.predict(inst.instruction_address, inst2.instruction_address);
-            if(inst.predicted){
+            inst3.predicted = predictor.predict(inst3.instruction_address, inst2.instruction_address);
+            if(inst3.predicted){
                 stats->num_correct++;
             }
-        } else {
-            inst.predicted = true; // for later
+	}
         }
     }
     for(uint64_t inst:fetching){
