@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <cstdint>
 
+std::vector<unsigned long> stalls;
+
 void clearRS(std::vector<inst_record>& rs, uint64_t tag);
 void clearRS(std::vector<inst_record>& rs, uint64_t tag){
     for(inst_record& i:rs){
@@ -19,9 +21,26 @@ void clearRS(std::vector<inst_record>& rs, uint64_t tag){
     }
 }
 
-void state_update(proc_stats_t* stats){
+std::vector<inst_entry> retiring;
+
+void state_update2(){
+    for(inst_entry& i : retiring){
+        bool dc;
+        proc_inst_t & inst = getInstruction(i.tag,dc);
+        proc_inst_t next = getInstruction(i.tag+1, dc);
+        inst.retired = cycle;
+        if(inst.op_code==-1&&dc){
+            predictor.update(inst.instruction_address, next.instruction_address);
+        }
+        clearRS(rs0,i.tag);
+        clearRS(rs1,i.tag);
+        clearRS(rs2,i.tag);
+    }
+}
+
+void state_update(){
     clear_busses();
-    std::vector<inst_entry> retiring;
+    retiring.clear();
     for(auto& i : fu0){
         inst_entry t = i.completed();
         if(t.filled)
@@ -38,27 +57,10 @@ void state_update(proc_stats_t* stats){
             retiring.push_back(t);
     }
     sort(begin(retiring), end(retiring), [](inst_entry i, inst_entry j){return i.tag<j.tag;});
+
     for(inst_entry& i : retiring){
-        bool dc;
-        proc_inst_t & inst = getInstruction(i.tag,dc);
-        proc_inst_t next = getInstruction(i.tag+1, dc);
-        inst.fetched += stats->total_branch_stall;
-        inst.executed += stats->total_branch_stall;
-        inst.dispatched += stats->total_branch_stall;
-        inst.scheduled += stats->total_branch_stall;
-        inst.retired = cycle+stats->total_branch_stall;
-        if(inst.op_code==-1&&dc){
-            predictor.update(inst.instruction_address, next.instruction_address);
-        }
-        if(!inst.predicted){
-            int delta = inst.retired-inst.fetched;
-            stats->total_branch_stall+=delta;
-        }
-        clearRS(rs0,i.tag);
-        clearRS(rs1,i.tag);
-        clearRS(rs2,i.tag);
-	write_reg(i.tag);
-	complete_instruction(i.tag);
-	icompleated++;
+        write_reg(i.tag);
+        complete_instruction(i.tag);
+        icompleated++;
     }
 }

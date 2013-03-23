@@ -15,7 +15,7 @@ void test(void)
 {
     uint64_t num_branch = 0;
     uint64_t num_correct = 0;
-	int N = 10;
+	const int N = 10;
 	proc_inst_t ins[N];
 	read_instruction(ins+1);
 	while(read_instruction(ins)){
@@ -31,7 +31,7 @@ void test(void)
 			ins[i+1] = ins[i];
 		}
 	}
-	printf("Percentage Correct Branch Predictions: %f(%llu/%llu)\n", 100*(num_correct/(float)num_branch), num_correct, num_branch);
+	printf("Percentage Correct Branch Predictions: %f\n", 100*(num_correct/(float)num_branch));
 }
 
 

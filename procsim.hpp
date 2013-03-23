@@ -18,7 +18,6 @@ typedef struct _proc_inst_t
     int32_t dest_reg;
     bool predicted;
     uint64_t fetched;
-    uint64_t dispatched;
     uint64_t scheduled;
     uint64_t executed;
     uint64_t retired;

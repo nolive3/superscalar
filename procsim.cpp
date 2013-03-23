@@ -63,11 +63,12 @@ void setup_proc(uint64_t k0, uint64_t k1, uint64_t k2, uint64_t f, uint64_t m) {
  */
 void run_proc(proc_stats_t* p_stats) {
     while (ifetched>icompleated || was_cache_stalled()){
-        state_update(p_stats);
+        state_update();
         execute();
         schedule();
         dispatch(p_stats);
         fetch(p_stats);
+        state_update2();
         p_stats->total_dqueue_size += fetched.size();
         cycle++;
     }
@@ -86,13 +87,13 @@ void complete_proc(proc_stats_t *p_stats) {
 		auto& i = instruction_list[num];
 		std::cout << num+1
 		<<"	"<< i.fetched
-		<<"	"<< i.dispatched
+		<<"	"<< i.fetched + 1
 		<<"	"<< i.scheduled
 		<<"	"<< i.executed
 		<<"	"<< i.retired
 		<< std::endl;
 	}
-    cycle += p_stats->total_branch_stall;
+	cycle--;
     p_stats->avg_dqueue_size = p_stats->total_dqueue_size/(float)cycle;
     p_stats->avg_inst_fire = ifetched/(float)cycle;
     p_stats->avg_ipc = icompleated/(float)cycle;

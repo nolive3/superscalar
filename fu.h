@@ -11,28 +11,28 @@ struct inst_entry{
 };
 template<int stages>
 class FU{
-    inst_entry buffer[stages];
+    inst_entry buffer[stages+1];
     public:
         inst_entry completed(){
             return buffer[0];
         }
         void clock(){
             bool dc;
-            if(buffer[stages-1].filled)
-                getInstruction(buffer[stages-1].tag, dc).executed = cycle-1;
-            for(int i = 1; i < stages; ++i){
+            if(buffer[stages-1+1].filled)
+                getInstruction(buffer[stages-1+1].tag, dc).executed = cycle;
+            for(int i = 1; i < stages+1; ++i){
                 buffer[i-1] = buffer[i];
             }
             inst_entry nil;
-            buffer[stages-1] = nil;
+            buffer[stages-1+1] = nil;
         }
         bool in_use(){
-            return buffer[stages-1].filled;
+            return buffer[stages-1+1].filled;
         }
         bool use(inst_entry inst){
             if(in_use())
                 return false;
-            buffer[stages-1] = inst;
+            buffer[stages-1+1] = inst;
             return true;
         }
 };

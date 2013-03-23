@@ -13,8 +13,6 @@ void dispatch(proc_stats_t* stats){
         bool exists;
         proc_inst_t& realinst = getInstruction(inst, exists);
         inst_record i;
-        if(realinst.dispatched == 0)
-            realinst.dispatched = cycle-1;
         i.instruction_number = inst;
         i.valid = true;
 	i.reg_ready[0] = true;
@@ -62,7 +60,7 @@ void dispatch(proc_stats_t* stats){
             break;
         }
         if(success){
-            realinst.scheduled = cycle;
+            realinst.scheduled = cycle+1;
             if(realinst.dest_reg != -1)
                 reserve_reg(realinst.dest_reg, inst);
             if(fetched.size() > stats->max_dqueue_size)
