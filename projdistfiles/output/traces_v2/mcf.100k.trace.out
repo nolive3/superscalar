@@ -99999,13 +99999,13 @@ INST	FETCH	DISP	SCHED	EXEC	STATE
 99998	192856	192857	192899	192900	192902
 99999	192857	192858	192900	192902	192905
 100000	192857	192858	192900	192901	192903
-Processor stats:
+
 Avg inst fired per cycle: 0.518390
 Total instructions: 100000
 Total run time (cycles): 192905
 Avg IPC: 0.518390
 Maximum Dispatch Queue: 107
 Average Dispatch Queue: 13.294653
-Percentage Correct Branch Predictions: 86.901650(19280/22186)
+Percentage Correct Branch Predictions: 86.901650
 Cycles stalled on ICache: 102330
 Cycles stalled on Branch Mispredict: 42819

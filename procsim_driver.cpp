@@ -131,14 +131,14 @@ int main(int argc, char* argv[]) {
 }
 
 void print_statistics(proc_stats_t* p_stats) {
-    printf("Processor stats:\n");
+    std::cout << std::endl;
 	printf("Avg inst fired per cycle: %f\n", p_stats->avg_inst_fire);
 	printf("Total instructions: %lu\n", p_stats->retired_instruction);
 	printf("Total run time (cycles): %lu\n", p_stats->cycle_count);
 	printf("Avg IPC: %f\n", p_stats->avg_ipc);
     printf("Maximum Dispatch Queue: %lu\n", p_stats->max_dqueue_size);
     printf("Average Dispatch Queue: %f\n", p_stats->avg_dqueue_size);
-    printf("Percentage Correct Branch Predictions: %f(%llu/%llu)\n", 100*(p_stats->num_correct/(float)p_stats->num_branch), p_stats->num_correct, p_stats->num_branch);
+    printf("Percentage Correct Branch Predictions: %f\n", 100*(p_stats->num_correct/(float)p_stats->num_branch));
     printf("Cycles stalled on ICache: %lu\n", p_stats->total_cache_stall);
     printf("Cycles stalled on Branch Mispredict: %lu\n", p_stats->total_branch_stall);
 }
