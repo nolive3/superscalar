@@ -1,0 +1,31 @@
+The included makefile has the following targets
+all:
+	same as procsim, but it is at the top
+	so that just typing make works.
+procsim:
+	builds the simulator from source
+	names the executable procsim
+check:
+	runs the simulator with each trace 
+	storing the result in nick_res then 
+	diffs each with the provided result 
+	storing the difference in nick_res/errs.
+	If any contain differences (they shouldnt)
+	it immediately terminates similar to make 
+	check from the previous assignment.
+	Takes about a second per trace.
+traces:
+	This runs every possible configuration after 
+	first running the relevant check and stores 
+	the result to nick_full_res.
+	This takes about 1~2 second per configuration 
+	for a total of about 4~8 minutes per trace or 
+	15~30 minutes total.
+	This also generates 3.6GB of data.
+	You probably dont want to run this one.
+clean:
+	This deletes generated files excluding the 
+	full trace results.
+distclean:
+	This deletes all generated files.
+	
