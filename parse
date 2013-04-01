@@ -1,0 +1,19 @@
+#!/bin/bash
+path_root="/media/nick/7E02BB6402BB2057/Users/nick/supermagictraceresults"
+echo -e "F\tM\tJ\tK\tL\tCycles\tCost\tProduct" > $path_root/$1.composite.out
+for f in 2 4 8
+do for m in 2 4 8
+do for j in 1 2 3
+do for k in 1 2 3
+do for l in 1 2 3
+do \
+fname="$path_root/nick_full_res/$1.f$f.m$m.j$j.k$k.l$l.out"
+cycles=$(grep -e "Total run time (cycles):" $fname | awk '{ print($5) }')
+disp_len=$(grep -e "Maximum Dispatch Queue:" $fname | awk '{ print($4) }')
+price=$(((($m+1)*($j+$k+$l))+$disp_len))
+echo -e "$f\t$m\t$j\t$k\t$l\t$cycles\t$price\t$(($cycles*$price))"
+done
+done
+done
+done
+done >> $path_root/$1.composite.out
