@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <iostream>
 #include <iomanip>
+#include "procsim.hpp"
+
 template <int len, int div, int mod>
 class BP
 {
@@ -28,6 +30,11 @@ class BP
             bool taken = result != branch+4;
             bool predt = mcounter[ind] >= 1<<(len-1);
             bool win = ((result == mtarget[ind]) && predt) || (!taken && !predt);
+            /*
+                std::cerr << std::dec << cycle << ": Checking index " << ind << ": (0x" << std::hex << std::setw(((32)>>2)) << std::setfill('0') << mtarget[ind] << ", ";
+                std::cerr << mcounter[ind] << ") ";
+                std::cerr << std::boolalpha << "Taken? " << taken << " Prediction " << predt << std::hex << std::setw(((32)>>2)) << std::setfill('0') << branch << "->" << result << std::endl;
+            */
             return win;
         }
 
@@ -42,6 +49,11 @@ class BP
             if(taken){
                 mtarget[ind] = result;
             }
+            /*
+                std::cerr << std::dec << cycle << ": Updating index " << ind << ": (0x" << std::hex << std::setw(((32)>>2)) << std::setfill('0') << mtarget[ind] << ", ";
+                std::cerr << mcounter[ind] << ") ";
+                std::cerr << std::boolalpha << "Taken? " << taken << " Prediction " << std::hex << std::setw(((32)>>2)) << std::setfill('0') << branch << "->" << result << std::endl;
+            */
         }
     protected:
     private:

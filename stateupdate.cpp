@@ -25,13 +25,6 @@ std::vector<inst_entry> retiring;
 
 void state_update2(){
     for(inst_entry& i : retiring){
-        bool dc;
-        proc_inst_t & inst = getInstruction(i.tag,dc);
-        proc_inst_t next = getInstruction(i.tag+1, dc);
-        inst.retired = cycle;
-        if(inst.op_code==-1&&dc){
-            predictor.update(inst.instruction_address, next.instruction_address);
-        }
         clearRS(rs0,i.tag);
         clearRS(rs1,i.tag);
         clearRS(rs2,i.tag);
@@ -62,5 +55,12 @@ void state_update(){
         write_reg(i.tag);
         complete_instruction(i.tag);
         icompleated++;
+        bool dc;
+        proc_inst_t & inst = getInstruction(i.tag,dc);
+        proc_inst_t next = getInstruction(i.tag+1, dc);
+        inst.retired = cycle;
+        if(inst.op_code==-1&&dc){
+            predictor.update(inst.instruction_address, next.instruction_address);
+        }
     }
 }
