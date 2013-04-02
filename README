@@ -1,3 +1,63 @@
+I used two definitions of 'almost min cycles' the first was 
+within 10% of the actual min cycles, and the second was higest 
+CPI/$, that is the highest value. Cost was calculated as the 
+sum of the number of FUs, the max length of the dispatch queue, 
+and the number of spaces in the scheduling queues.
+
+The complete list of 
+F M J K L Cycles Cost Cycles*Cost
+is included, however the full result 
+traces will need to be generated if 
+you wish to see them, they were much 
+too large to submit.
+
+My results are as follows:
+GCC:
+	Absolute min cycles: 
+		F M J K L Cycles Cost Cycles*Cost
+		8 8 3 3 3 62055 212 13155660
+	Min cost within 10% of min (ie almost min <= 68260)
+		F M J K L Cycles Cost Cycles*Cost
+		4 8 3 2 1 67148 133 8930684
+	Absolute min product, that is max CPI/Cost (CPI ~= 1/Cycles)
+		F M J K L Cycles Cost Cycles*Cost
+		2 8 3 1 1 87540 49 4289460
+
+GOBMK:
+	Absolute min cycles: 
+		F M J K L Cycles Cost Cycles*Cost
+		8 8 3 3 3 107139 7358 788328762
+	Min cost within 10% of min (ie almost min <= 117852)
+		F M J K L Cycles Cost Cycles*Cost
+		2 2 1 1 1 202314 5375 1087437750
+	Absolute min product, that is max CPI/Cost (CPI ~= 1/Cycles)
+		F M J K L Cycles Cost Cycles*Cost
+		2 8 3 2 3 132238 4642 613848796
+
+HMMER:
+	Absolute min cycles: 
+		F M J K L Cycles Cost Cycles*Cost
+		8 8 3 3 3 111615 315 35158725
+	Min cost within 10% of min (ie almost min <= 122776)
+		F M J K L Cycles Cost Cycles*Cost
+		4 8 3 3 1 121014 194 23476716
+	Absolute min product, that is max CPI/Cost (CPI ~= 1/Cycles)
+		F M J K L Cycles Cost Cycles*Cost
+		2 8 2 2 1 147253 64 9424192
+
+MCF:
+	Absolute min cycles: 
+		F M J K L Cycles Cost Cycles*Cost
+		8 8 3 3 3 128685 127 16342995
+	Min cost within 10% of min (ie almost min <= 141553)
+		F M J K L Cycles Cost Cycles*Cost
+		4 8 3 1 2 138087 67 9251829
+	Absolute min product, that is max CPI/Cost (CPI ~= 1/Cycles)
+		F M J K L Cycles Cost Cycles*Cost
+		2 4 3 1 2 162041 40 6481640
+
+
+
 The included makefile has the following targets
 all:
 	same as procsim, but it is at the top

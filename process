@@ -1,13 +1,16 @@
 #!/bin/bash
-path_root="/media/nick/7E02BB6402BB2057/Users/nick/supermagictraceresults"
+path_root="composit_outputs"
 fname="$path_root/$1.composite.out"
 abs_min=$(awk 'NR == 2 {min=$6 ; line=$0} $6 <= min {min = $6; line=$0} END { print line }' $fname)
-cutoff=$(($(echo $abs_min | awk '{ print $6*1.1 }')))
+cutoff=$(($(echo $abs_min | awk '{ printf("%d", $6*1.1) }')))
 cost_min=$(awk -v cutoff=$cutoff 'NR == 2 {min=$7 ; minval=$6; line=$0} (($7 < min) || (($7 == min)&&($6<=minval))) && ($6 <= cutoff) {min = $7; line=$0} END { print line }' $fname)
 prod_min=$(awk 'NR == 2 {min=$8 ; line=$0} $8 <= min {min = $8; line=$0} END { print line }' $fname)
-echo "Min cost within 10% of min (ie almost min <= $cutoff)"
 echo "Absolute min cycles: "
 echo "F M J K L Cycles Cost Cycles*Cost"
 echo $abs_min
+echo "Min cost within 10% of min (ie almost min <= $cutoff)"
+echo "F M J K L Cycles Cost Cycles*Cost"
 echo $cost_min
+echo "Absolute min product, that is max CPI/Cost (CPI ~= 1/Cycles)"
+echo "F M J K L Cycles Cost Cycles*Cost"
 echo $prod_min
